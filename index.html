@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Wombat Coin Market Cap</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <!-- Own CSS and js code -->
+        <link rel="stylesheet" href="style.css">
+        <script src="wombatCoinMarketCap.js"></script>
+    </head>
+    <body>
+
+        <div class="container-fluid">
+            <div class="row" id="test-row-navbar">
+                <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1 col-1 grid-photo">
+                    <a href="#">
+                        <img src="assets/wombat-log.jpeg" class="logo" alt="..." >
+                    </a>
+                </div>
+                <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11 col-11" id="brand-name">
+                    <nav class="navbar navbar-light bg-white">
+                        <a class="navbar-brand" href="#">
+                            <div class="text-center">
+                               <h3 id="navbar-text">WombatCoinMarketCap</h3>
+                            </div>
+                        </a>
+                    </nav>
+                </div>                
+            </div>
+            <hr class="across-page">
+            <div class="row justify-content-center" >
+                    <h5>Top 100 Cryptocurrencies by Marketcap Capitalization</h5>
+            </div>
+            <div class="row justify-content-center">
+                <h7> Powered by CoinGecko API </h7>
+            </div>
+            <div class="row">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="#">Cryptocurrencies</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link " href="#">Exchanges</a>
+                    </li>
+                  </ul>
+            </div>
+            <div class="row">
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Market Cap</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Volume (24h)</th>
+                        <th scope="col">Circulating Supply</th>
+                        <th scope="col">Change (24h)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td id="coinName"></td>
+                        <td id="coinMarketCap"></td>
+                        <td id="coinPrice"></td>
+                        <td id="coinVolume"></td>
+                        <td id="coinCirculatingSupply"></td>
+                        <td id="Change"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+          </div>
+
+
+
+    
+
+        
+        
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    </body>
+</html>
