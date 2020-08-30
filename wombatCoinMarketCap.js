@@ -1,42 +1,45 @@
+let baseURL = "https://api.coingecko.com/api/v3";
+let currency ="usd";
+let page = 1;
+let currentPage = page;
+let perPage=100;
 
-document.addEventListener("DOMContentLoaded", () => {
 
-    let baseURL = "https://api.coingecko.com/api/v3";
-    let currency ="usd";
-    let page = 1;
-    let perPage=100;
+
+function formatNumber(number){
+    if(number===null){
+        return "--"
+    }
+
+    let decimalParts=2;
+
+    if(number<1){
+        decimalParts=5;
+    }
+
+    number = number.toFixed(decimalParts) + '';
+    x = number.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+};
+    
+function RedGreenClassToggle(price_change_percentage_24h){
+    if(price_change_percentage_24h > 0){
+        return "green";
+    }else{
+        return "red";
+    }
+};
+
+function printCryptoCurrencyTable(baseURL,currency,perPage,page){
+
     let endpoint = "/coins/markets?vs_currency="+currency+"&order=market_cap_desc&per_page="+perPage+"&page="+page+"&sparkline=false&price_change_percentage=24h";
     let url = baseURL + endpoint;
-
-    function formatNumber(number){
-        if(number===null){
-            return "--"
-        }
-
-        let decimalParts=2;
-
-        if(number<1){
-            decimalParts=5;
-        }
-
-        number = number.toFixed(decimalParts) + '';
-        x = number.split('.');
-        x1 = x[0];
-        x2 = x.length > 1 ? '.' + x[1] : '';
-        var rgx = /(\d+)(\d{3})/;
-        while (rgx.test(x1)) {
-            x1 = x1.replace(rgx, '$1' + ',' + '$2');
-        }
-        return x1 + x2;
-    };
-    
-    function RedGreenClassToggle(price_change_percentage_24h){
-        if(price_change_percentage_24h > 0){
-            return "green";
-        }else{
-           return "red";
-        }
-    };
 
     fetch(url)
     .then(res=>{
@@ -86,7 +89,64 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     });
+};
 
-  
+function ClickNextPage(currentPage){
+
+    currentPage++;
+
+    if($("#crypto-tab").hasClass("active")){
+        printCryptoCurrencyTable(baseURL,"USD",100,currentPage);    
+    }
+    // else{
+    //     printExchangeTable(baseURL,"USD",100,1);
+    // }
+
+    if($("#previous-link").hasClass("invisible") && currentPage>1){
+        $("#previous-link").removeClass("invisible");
+    }
+
+    if(currentPage==5){
+        $("#next-link").addClass("invisible");
+    }
+    return currentPage;
+}
+
+function ClickPreviousPage(currentPage){
+    
+    currentPage--;
+
+    if($("#crypto-tab").hasClass("active")){
+        printCryptoCurrencyTable(baseURL,"USD",100,currentPage);    
+    }
+    // else{
+    //     printExchangeTable(baseURL,"USD",100,1);
+    // }
+
+    if($("#next-link").hasClass("invisible") && currentPage<5){
+        $("#next-link").removeClass("invisible");
+    }
+
+    if(currentPage==1){
+        $("#previous-link").addClass("invisible");
+    }
+
+    return currentPage;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    printCryptoCurrencyTable(baseURL,"USD",100,1);
+
+    $("#next-link").click(function(){
+        $("#here-table").html("");
+        currentPage=ClickNextPage(currentPage);
+    });
+
+    $("#previous-link").click(function(){
+        $("#here-table").html("");
+        currentPage=ClickPreviousPage(currentPage);
+    });
+    
 
 });
