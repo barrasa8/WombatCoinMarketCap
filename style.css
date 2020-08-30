@@ -43,3 +43,15 @@
      margin-left: -85px;
      margin-right: -85px;
  }
+
+ #table-coin-logo{
+     width: 20px;
+ }
+
+ .green{
+     color:green;
+ }
+
+ .red{
+     color:red;
+ }
