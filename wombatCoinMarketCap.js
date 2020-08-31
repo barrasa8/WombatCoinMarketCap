@@ -3,6 +3,7 @@ let currency ="usd";
 let page = 1;
 let currentPage = page;
 let perPage=100;
+let title ;
 
 
 
@@ -109,6 +110,10 @@ function ClickNextPage(currentPage){
     if(currentPage==5){
         $("#next-link").addClass("invisible");
     }
+
+    //Show page in title
+    $("#title-page-text").html("(Page " + currentPage + ")");
+
     return currentPage;
 }
 
@@ -131,10 +136,19 @@ function ClickPreviousPage(currentPage){
         $("#previous-link").addClass("invisible");
     }
 
+    //Show Page in title
+    if(currentPage===1){
+        $("#title-page-text").html("");
+    }else{
+        $("#title-page-text").html("(Page " + currentPage + ")");
+    }
+
     return currentPage;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    title = $("#title").text();
 
     printCryptoCurrencyTable(baseURL,"USD",100,1);
 
