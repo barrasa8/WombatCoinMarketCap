@@ -37,6 +37,54 @@ function RedGreenClassToggle(price_change_percentage_24h){
     }
 };
 
+function printExchangeTable(perPage,page){
+    let endpoint="/exchanges?per_page="+perPage+"&page="+page;
+    let url = baseURL + endpoint;
+
+
+    fetch(url)
+    .then(res=>{
+
+        res.json()
+        .then(data=>{
+
+            $('#here-table').append(
+                '<table class="table table-hover" >'
+                +'<thead>'
+                +'<tr>'
+                +'  <th scope="col">Rank</th>'
+                +'  <th scope="col">Name</th>'
+                +'  <th scope="col">Trust Score</th>'
+                +'  <th scope="col">BTC Trade Volume (24h)</th>'
+                +'  <th scope="col">Year Launched</th>'
+                +'</tr>'
+              +'</thead>'
+              +'<tbody id="here-tbody">'
+            );
+
+            for(let i=0 ;i<perPage;i++){
+                
+                $('#here-tbody').append( '<tr>'
+                                            +'<th scope="row">' + data[i].trust_score_rank + '</th>'
+                                            +'<th>' +'<img src="'+data[i].image+'" id="table-coin-logo" > ' + data[i].name + '</th>'
+                                            +'<td>' + data[i].trust_score + '</td>'
+                                            +'<td>' + formatNumber(data[i].trade_volume_24h_btc)+ '</td>'
+                                            +'<td>' + data[i].year_established + '</td>'
+                                        +'</tr>'
+                                        );
+            }
+
+            $("#here-tbody").append(
+                '</tbody>'
+                 +'</table>'
+            );
+        }).catch(err =>{
+            console.log(err);
+        });
+    });
+
+}
+
 function printCryptoCurrencyTable(baseURL,currency,perPage,page){
 
     let endpoint = "/coins/markets?vs_currency="+currency+"&order=market_cap_desc&per_page="+perPage+"&page="+page+"&sparkline=false&price_change_percentage=24h";
@@ -47,8 +95,6 @@ function printCryptoCurrencyTable(baseURL,currency,perPage,page){
 
         res.json()
         .then(data=>{
-
-            console.log(data);
 
             $('#here-table').append(
                 '<table class="table table-hover" >'
@@ -82,7 +128,7 @@ function printCryptoCurrencyTable(baseURL,currency,perPage,page){
 
             $("#here-tbody").append(
                     '</tbody>'
-               +'</table>'
+                    +'</table>'
             );
 
         }).catch(err =>{
@@ -99,15 +145,15 @@ function ClickNextPage(currentPage){
     if($("#crypto-tab").hasClass("active")){
         printCryptoCurrencyTable(baseURL,"USD",100,currentPage);    
     }
-    // else{
-    //     printExchangeTable(baseURL,"USD",100,1);
-    // }
+    else{
+        printExchangeTable(100,currentPage);
+    }
 
     if($("#previous-link").hasClass("invisible") && currentPage>1){
         $("#previous-link").removeClass("invisible");
     }
 
-    if(currentPage==5){
+    if(currentPage==3){
         $("#next-link").addClass("invisible");
     }
 
@@ -124,9 +170,9 @@ function ClickPreviousPage(currentPage){
     if($("#crypto-tab").hasClass("active")){
         printCryptoCurrencyTable(baseURL,"USD",100,currentPage);    
     }
-    // else{
-    //     printExchangeTable(baseURL,"USD",100,1);
-    // }
+    else{
+        printExchangeTable(100,currentPage);
+    }
 
     if($("#next-link").hasClass("invisible") && currentPage<5){
         $("#next-link").removeClass("invisible");
@@ -146,8 +192,12 @@ function ClickPreviousPage(currentPage){
     return currentPage;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function cleanTable(){
+    $("#here-table").html("");
+}
 
+document.addEventListener("DOMContentLoaded", () => {
+    //Store the title
     title = $("#title").text();
 
     printCryptoCurrencyTable(baseURL,"USD",100,1);
@@ -162,5 +212,22 @@ document.addEventListener("DOMContentLoaded", () => {
         currentPage=ClickPreviousPage(currentPage);
     });
     
+    $("#exchange-tab").click(function(){
+        if(!$("#exchange-tab").hasClass("active")){
+            $("#crypto-tab").removeClass("active");
+            $("#exchange-tab").addClass("active");
+            cleanTable();
+            printExchangeTable(perPage,page);
+        }
+    });
+
+    $("#crypto-tab").click(function(){
+        if(!$("#crypto-tab").hasClass("active")){
+            $("#exchange-tab").removeClass("active");
+            $("#crypto-tab").addClass("active");
+            cleanTable();
+            printCryptoCurrencyTable(baseURL,"USD",100,1);
+        }
+    });
 
 });
