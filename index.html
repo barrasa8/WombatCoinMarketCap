@@ -15,20 +15,14 @@
 
         <div class="container-fluid">
             <div class="row" id="test-row-navbar">
-                <div class="col-sm-1 col-md-1 col-lg-1 col-xl-1 col-1 grid-photo">
-                    <a href="#">
-                        <img src="assets/wombat-log.jpeg" class="logo" alt="..." >
-                    </a>
+              <a href="#">
+                <img src="assets/wombat-log.jpeg" class="logo" alt="..." >
+              </a> 
+              <a class="navbar-brand" href="#">
+                <div class="text-center">
+                    <h3 id="navbar-text">WombatCoinMarketCap</h3>
                 </div>
-                <div class="col-sm-11 col-md-11 col-lg-11 col-xl-11 col-11" id="brand-name">
-                    <nav class="navbar navbar-light bg-white">
-                        <a class="navbar-brand" href="#">
-                            <div class="text-center">
-                               <h3 id="navbar-text">WombatCoinMarketCap</h3>
-                            </div>
-                        </a>
-                    </nav>
-                </div>                
+              </a>         
             </div>
             <hr class="across-page">
             <div class="row justify-content-center" >
@@ -48,14 +42,26 @@
                     </li>
                   </ul>
                 </div>
-                <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 col-4">
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-2">
+                  <div class="input-group mb-3">
+                    <select class="custom-select" id="inputGroupSelect01">
+                      <option value="usd" selected>USD</option>
+                      <option value="euro">EUR</option>
+                      <option value="aud">AUD</option>
+                    </select>
+                    <select class="custom-select" id="inputGroupSelect01">
+                      <option value="50" selected>50</option>
+                      <option value="100">100</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-2">
                   <!-- <nav aria-label="Page navigation example"> -->
                     <ul class="pagination" id="pagination-ul">
-                      <li class="page-item invisible" id="previous-link"><a class="page-link" href="#">Previous 100</a></li>
+                      <li class="page-item invisible" id="previous-link"><a class="page-link" href="#">Prev. 100</a></li>
                       <li class="page-item" id="next-link"><a class="page-link" href="#">Next 100</a></li>
                     </ul>
                   <!-- </nav> -->
-
                 </div>
             </div>
             <div class="row" id="here-table" >

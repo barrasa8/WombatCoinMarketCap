@@ -1,10 +1,18 @@
 let baseURL = "https://api.coingecko.com/api/v3";
-let currency ="usd";
-let page = 1;
-let currentPage = page;
-let perPage=100;
-let title ;
+// let currency ="usd";
+// let page = 1;
+//let currentPage = page;
+//let title ;
 
+if (typeof(Storage) !== "undefined") {
+    // Code for localStorage/sessionStorage.
+    localStorage.setItem("currency", "usd");
+    localStorage.setItem("currentPage",1);
+    localStorage.setItem("perPage",100);
+    localStorage.setItem("title","Top Cryptocurrencies by Marketcap Capitalization");
+} else {
+window.alert("Sorry, no local storage");
+}
 
 
 function formatNumber(number){
@@ -38,7 +46,7 @@ function RedGreenClassToggle(price_change_percentage_24h){
 };
 
 function printExchangeTable(perPage,page){
-    let endpoint="/exchanges?per_page="+perPage+"&page="+page;
+    let endpoint="/exchanges?per_page="+localStorage.getItem("perPage")+"&page="+localStorage.getItem("currentPage");
     let url = baseURL + endpoint;
 
 
@@ -62,7 +70,7 @@ function printExchangeTable(perPage,page){
               +'<tbody id="here-tbody">'
             );
 
-            for(let i=0 ;i<perPage;i++){
+            for(let i=0 ;i<localStorage.getItem("perPage");i++){
                 
                 $('#here-tbody').append( '<tr>'
                                             +'<th scope="row">' + data[i].trust_score_rank + '</th>'
@@ -87,7 +95,7 @@ function printExchangeTable(perPage,page){
 
 function printCryptoCurrencyTable(baseURL,currency,perPage,page){
 
-    let endpoint = "/coins/markets?vs_currency="+currency+"&order=market_cap_desc&per_page="+perPage+"&page="+page+"&sparkline=false&price_change_percentage=24h";
+    let endpoint = "/coins/markets?vs_currency="+localStorage.getItem("currency")+"&order=market_cap_desc&per_page="+localStorage.getItem("perPage")+"&page="+localStorage.getItem("currentPage")+"&sparkline=false&price_change_percentage=24h";
     let url = baseURL + endpoint;
 
     fetch(url)
@@ -140,56 +148,56 @@ function printCryptoCurrencyTable(baseURL,currency,perPage,page){
 
 function ClickNextPage(currentPage){
 
-    currentPage++;
+    localStorage.setItem("currentPage", Number(localStorage.getItem("currentPage"))+1);
 
     if($("#crypto-tab").hasClass("active")){
-        printCryptoCurrencyTable(baseURL,"USD",100,currentPage);    
+        printCryptoCurrencyTable(baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));    
     }
     else{
-        printExchangeTable(100,currentPage);
+        printExchangeTable(localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
     }
 
-    if($("#previous-link").hasClass("invisible") && currentPage>1){
+    if($("#previous-link").hasClass("invisible") && localStorage.getItem("currentPage")>1){
         $("#previous-link").removeClass("invisible");
     }
 
-    if(currentPage==3){
+    if(localStorage.getItem("currentPage")==3){
         $("#next-link").addClass("invisible");
     }
 
     //Show page in title
-    $("#title-page-text").html("(Page " + currentPage + ")");
+    $("#title-page-text").html("(Page " + localStorage.getItem("currentPage") + ")");
 
-    return currentPage;
+    return localStorage.getItem("currentPage");
 }
 
 function ClickPreviousPage(currentPage){
     
-    currentPage--;
+    localStorage.setItem("currentPage", Number(localStorage.getItem("currentPage"))-1);
 
     if($("#crypto-tab").hasClass("active")){
-        printCryptoCurrencyTable(baseURL,"USD",100,currentPage);    
+        printCryptoCurrencyTable(baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));    
     }
     else{
-        printExchangeTable(100,currentPage);
+        printExchangeTable(100,localStorage.getItem("currentPage"));
     }
 
-    if($("#next-link").hasClass("invisible") && currentPage<5){
+    if($("#next-link").hasClass("invisible") && localStorage.getItem("currentPage")<5){
         $("#next-link").removeClass("invisible");
     }
 
-    if(currentPage==1){
+    if(localStorage.getItem("currentPage")==1){
         $("#previous-link").addClass("invisible");
     }
 
     //Show Page in title
-    if(currentPage===1){
+    if(localStorage.getItem("currentPage")===1){
         $("#title-page-text").html("");
     }else{
-        $("#title-page-text").html("(Page " + currentPage + ")");
+        $("#title-page-text").html("(Page " + localStorage.getItem("currentPage") + ")");
     }
 
-    return currentPage;
+    return localStorage.getItem("currentPage");
 }
 
 function cleanTable(){
@@ -200,16 +208,16 @@ document.addEventListener("DOMContentLoaded", () => {
     //Store the title
     title = $("#title").text();
 
-    printCryptoCurrencyTable(baseURL,"USD",100,1);
+    printCryptoCurrencyTable(baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
 
     $("#next-link").click(function(){
         $("#here-table").html("");
-        currentPage=ClickNextPage(currentPage);
+        localStorage.setItem("currentPage",ClickNextPage(localStorage.getItem("currentPage")));
     });
 
     $("#previous-link").click(function(){
         $("#here-table").html("");
-        currentPage=ClickPreviousPage(currentPage);
+        localStorage.setItem("currentPage",ClickPreviousPage(localStorage.getItem("currentPage")));
     });
     
     $("#exchange-tab").click(function(){
@@ -217,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
             $("#crypto-tab").removeClass("active");
             $("#exchange-tab").addClass("active");
             cleanTable();
-            printExchangeTable(perPage,page);
+            printExchangeTable(localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
         }
     });
 
@@ -226,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
             $("#exchange-tab").removeClass("active");
             $("#crypto-tab").addClass("active");
             cleanTable();
-            printCryptoCurrencyTable(baseURL,"USD",100,1);
+            printCryptoCurrencyTable(baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
         }
     });
 
