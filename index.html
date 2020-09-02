@@ -12,7 +12,6 @@
         <script src="wombatCoinMarketCap.js"></script>
     </head>
     <body>
-
         <div class="container-fluid">
             <div class="row" id="test-row-navbar">
               <a href="#">
@@ -26,7 +25,7 @@
             </div>
             <hr class="across-page">
             <div class="row justify-content-center" >
-                    <h5>Top 100 Cryptocurrencies by Marketcap Capitalization <span id="title-page-text"></span></h5>
+                    <h5>Top <span id="perPageText"></span> Cryptocurrencies by Marketcap Capitalization <span id="title-page-text"></span></h5>
             </div>
             <div class="row justify-content-center">
                 <h7> Powered by CoinGecko API </h7>
@@ -44,12 +43,12 @@
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 col-2">
                   <div class="input-group mb-3">
-                    <select class="custom-select" id="inputGroupSelect01">
-                      <option value="usd" selected>USD</option>
-                      <option value="euro">EUR</option>
+                    <select class="custom-select" id="currencyGroupSelect">
+                      <option value="usd">USD</option>
+                      <option value="eur">EUR</option>
                       <option value="aud">AUD</option>
                     </select>
-                    <select class="custom-select" id="inputGroupSelect01">
+                    <select class="custom-select" id="perPageGroupSelect">
                       <option value="50" selected>50</option>
                       <option value="100">100</option>
                     </select>
