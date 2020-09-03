@@ -44,6 +44,25 @@ function RedGreenClassToggle(price_change_percentage_24h){
     }
 };
 
+const fetchCryptoCurrencyData = async (baseURL,currency,perPage,page) => {
+    try{
+
+        let endpoint = "/coins/markets?vs_currency="+currency+"&order=market_cap_desc&per_page="+perPage+"&page="+page+"&sparkline=false&price_change_percentage=24h";
+        let url = baseURL + endpoint;
+
+        
+        let res =  await fetch(url);
+        let data = await res.json();
+
+        localStorage.setItem("cryptoData",JSON.stringify(data));
+        
+        return data;
+
+    }catch(err){
+        console.log(err);
+    }
+}
+
 const printExchangeTable =  async (perPage,page) => {
     try{
         let endpoint="/exchanges?per_page="+localStorage.getItem("perPage")+"&page="+localStorage.getItem("currentPage");
@@ -87,33 +106,49 @@ const printExchangeTable =  async (perPage,page) => {
     }
 }
 
-const printCryptoCurrencyTable = async (baseURL,currency,perPage,page) => {
-    try{
+const printCryptoCurrencyTable = async (doFetch,baseURL,currency,perPage,page)=> {
+        let data;
 
-        let endpoint = "/coins/markets?vs_currency="+localStorage.getItem("currency")+"&order=market_cap_desc&per_page="+localStorage.getItem("perPage")+"&page="+localStorage.getItem("currentPage")+"&sparkline=false&price_change_percentage=24h";
-        let url = baseURL + endpoint;
+        if(doFetch){
+            console.log("this is the value od doFEtch --> " + doFetch)
+            data = await fetchCryptoCurrencyData(baseURL,currency,perPage,page);
+            cleanTable();
+            $('#here-table').append(
+                '<table class="table table-hover" >'
+                +'<thead>'
+                +'<tr>'
+                +'  <th scope="col">Rank</th>'
+                +'  <th scope="col">Name</th>'
+                +'  <th scope="col"><span id="marketCap" class="isAsc">Market Cap</span></th>'
+                +'  <th scope="col">Price</th>'
+                +'  <th scope="col">Volume (24h)</th>'
+                +'  <th scope="col">Circulating Supply</th>'
+                +'  <th scope="col">Change (24h)</th>'
+                +'</tr>'
+            +'</thead>'
+            +'<tbody id="here-tbody">'
+            );
 
-        
-        let res =  await fetch(url);
-        let data = await res.json();
+            $("#marketCap").click(function(){  
+                cleanTableBody();  
+                if($("#marketCap").hasClass("isAsc")){
+                    $("#marketCap").removeClass("isAsc");
+                    orderCryptoTable("market_cap",true); 
+                    printCryptoCurrencyTable(false,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
+                    console.log("hellooooo");
+                }else{
+                    $("#marketCap").addClass("isAsc");
+                    orderCryptoTable("market_cap",false);
+                    console.log("hello bye");
+                    printCryptoCurrencyTable(false,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
 
-        localStorage.setItem("cryptoData",JSON.stringify(data));
+                }
+            });
 
-        $('#here-table').append(
-                    '<table class="table table-hover" >'
-                    +'<thead>'
-                    +'<tr>'
-                    +'  <th scope="col">Rank</th>'
-                    +'  <th scope="col">Name</th>'
-                    +'  <th scope="col">Market Cap</th>'
-                    +'  <th scope="col">Price</th>'
-                    +'  <th scope="col">Volume (24h)</th>'
-                    +'  <th scope="col">Circulating Supply</th>'
-                    +'  <th scope="col">Change (24h)</th>'
-                    +'</tr>'
-                +'</thead>'
-                +'<tbody id="here-tbody">'
-                );
+        }else{
+            console.log("this is the value od doFEtch --> " + doFetch)
+            data = JSON.parse(localStorage.getItem("cryptoData"));
+        };
 
         for(let i=0 ;i<perPage;i++){
             
@@ -133,17 +168,17 @@ const printCryptoCurrencyTable = async (baseURL,currency,perPage,page) => {
                 '</tbody>'
                 +'</table>'
         );
-    }catch(err){
-        console.log(err);
-    };
-};
+    
+        
+        
+}
 
 function ClickNextPage(currentPage){
 
     localStorage.setItem("currentPage", Number(localStorage.getItem("currentPage"))+1);
 
     if($("#crypto-tab").hasClass("active")){
-        printCryptoCurrencyTable(baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));    
+        printCryptoCurrencyTable(true,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));    
     }
     else{
         printExchangeTable(localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
@@ -168,7 +203,7 @@ function ClickPreviousPage(currentPage){
     localStorage.setItem("currentPage", Number(localStorage.getItem("currentPage"))-1);
 
     if($("#crypto-tab").hasClass("active")){
-        printCryptoCurrencyTable(baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));    
+        printCryptoCurrencyTable(true,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));    
     }
     else{
         printExchangeTable(100,localStorage.getItem("currentPage"));
@@ -192,53 +227,60 @@ function ClickPreviousPage(currentPage){
     return localStorage.getItem("currentPage");
 }
 
+function cleanTableBody(){
+    $("#here-tbody").html("");
+}
+
 function cleanTable(){
     $("#here-table").html("");
 }
 
 function orderCryptoTable(orderField,isAsc){
     
-    var data = JSON.parse(localStorage.getItem('cryptoData'));
+    let data = JSON.parse(localStorage.getItem('cryptoData'));
+    let dataOrdered;
 
     switch (orderField) {
         case "current_price":
             if(isAsc==true){
-                return data.sort((a, b) => parseFloat(b.current_price) - parseFloat(a.current_price));    
+                dataOrdered= data.sort((a, b) => parseFloat(b.current_price) - parseFloat(a.current_price));    
             }else if(isAsc==false){
-                return data.sort((a, b) => parseFloat(a.current_price) - parseFloat(b.current_price));
+                dataOrdered =  data.sort((a, b) => parseFloat(a.current_price) - parseFloat(b.current_price));
             }
             break;
-        case "market_cap":
+        case "market_cap":            
             if(isAsc==true){
-                return data.sort((a, b) => parseFloat(a.market_cap) - parseFloat(b.market_cap));
+                dataOrdered =  data.sort((a, b) => parseFloat(a.market_cap) - parseFloat(b.market_cap));
             }else{ if(isAsc==false)
-                return data.sort((a, b) => parseFloat(b.market_cap) - parseFloat(a.market_cap));   
+                dataOrdered =  data.sort((a, b) => parseFloat(b.market_cap) - parseFloat(a.market_cap));   
             }
             break;
         case "total_volume":
             if(isAsc==true){
-                return data.sort((a, b) => parseFloat(a.total_volume) - parseFloat(b.total_volume));
+                dataOrdered =  data.sort((a, b) => parseFloat(a.total_volume) - parseFloat(b.total_volume));
             }else if(isAsc==false){
-                return data.sort((a, b) => parseFloat(b.total_volume) - parseFloat(a.total_volume));  
+                dataOrdered =  data.sort((a, b) => parseFloat(b.total_volume) - parseFloat(a.total_volume));  
             }
             break;
         case "price_change_percentage_24h":
             if(isAsc==true){
-                return data.sort((a, b) => parseFloat(a.price_change_percentage_24h) - parseFloat(b.price_change_percentage_24h));                
+                dataOrdered =  data.sort((a, b) => parseFloat(a.price_change_percentage_24h) - parseFloat(b.price_change_percentage_24h));                
             }else if(isAsc==false){
-                return data.sort((a, b) => parseFloat(b.price_change_percentage_24h) - parseFloat(a.price_change_percentage_24h));    
+                dataOrdered =  data.sort((a, b) => parseFloat(b.price_change_percentage_24h) - parseFloat(a.price_change_percentage_24h));    
             }
             break;
         default:
           console.log("Sorry, Not a valide field to sort.");
-      }
+      };
+
+      localStorage.setItem("cryptoData",JSON.stringify(dataOrdered));
 }
 
 document.addEventListener("DOMContentLoaded", () => {
     //insert PerPage number in title
     $("#perPageText").html(localStorage.getItem("perPage"));
 
-    printCryptoCurrencyTable(baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
+    printCryptoCurrencyTable(true,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
 
     $("#next-link").click(function(){
         $("#here-table").html("");
@@ -254,7 +296,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if(!$("#exchange-tab").hasClass("active")){
             $("#crypto-tab").removeClass("active");
             $("#exchange-tab").addClass("active");
-            cleanTable();
+            cleanTableBody();
             printExchangeTable(localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
         }
     });
@@ -263,8 +305,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if(!$("#crypto-tab").hasClass("active")){
             $("#exchange-tab").removeClass("active");
             $("#crypto-tab").addClass("active");
-            cleanTable();
-            printCryptoCurrencyTable(baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
+            cleanTableBody();
+            printCryptoCurrencyTable(true,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
         }
     });
 
@@ -275,10 +317,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }else{
             localStorage.setItem("currencySymbol","$");        
         }
-        cleanTable();
+        cleanTableBody();
         if($("#crypto-tab").hasClass("active")){
             console.log("crypto tab is active")
-            printCryptoCurrencyTable(baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
+            printCryptoCurrencyTable(true,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
         }else{
             printExchangeTable(localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
         }
@@ -287,13 +329,14 @@ document.addEventListener("DOMContentLoaded", () => {
     $("#perPageGroupSelect").click(function(){
         localStorage.setItem("perPage",$("#perPageGroupSelect option:selected").val());
         $("#perPageText").html(localStorage.getItem("perPage"));
-        cleanTable();
+        cleanTableBody();
         if($("#crypto-tab").hasClass("active")){
             console.log("crypto tab is active")
-            printCryptoCurrencyTable(baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
+            printCryptoCurrencyTable(true,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
         }else{
             printExchangeTable(localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
         }
-    });    
+    });  
+
 
 });
