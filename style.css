@@ -27,7 +27,6 @@
 #navbar-text{
     font-family: 'Pacifico', cursive , sans-serif;
     margin: 0px;
-    color: black;
 }
 
 .grid-photo {
@@ -68,4 +67,8 @@
 
  .table-header-order:hover{
     text-decoration-color: lightseagreen;
+ }
+
+ .exchange-name-link{
+     color: black;
  }

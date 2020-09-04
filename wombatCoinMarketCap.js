@@ -107,11 +107,9 @@ const printExchangeTable =  async (doFetch,baseURL,perPage,page) => {
                     $("#trustScore").removeClass("isAsc");
                     orderCryptoTable("trust_score",true); 
                     printExchangeTable(false,baseURL,localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
-                    //console.log("hellooooo");
                 }else{
                     $("#trustScore").addClass("isAsc");
                     orderCryptoTable("trust_score",false);
-                    //console.log("hello bye");
                     printExchangeTable(false,baseURL,localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
 
                 }
@@ -123,11 +121,9 @@ const printExchangeTable =  async (doFetch,baseURL,perPage,page) => {
                     $("#volume24h").removeClass("isAsc");
                     orderCryptoTable("trade_volume_24h_btc",true); 
                     printExchangeTable(false,baseURL,localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
-                    //console.log("hellooooo");
                 }else{
                     $("#volume24h").addClass("isAsc");
                     orderCryptoTable("trade_volume_24h_btc",false);
-                    //console.log("hello bye");
                     printExchangeTable(false,baseURL,localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
 
                 }
@@ -139,25 +135,22 @@ const printExchangeTable =  async (doFetch,baseURL,perPage,page) => {
                     $("#yearLaunched").removeClass("isAsc");
                     orderCryptoTable("year_established",true); 
                     printExchangeTable(false,baseURL,localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
-                    //console.log("hellooooo");
                 }else{
                     $("#yearLaunched").addClass("isAsc");
                     orderCryptoTable("year_established",false);
-                    //console.log("hello bye");
                     printExchangeTable(false,baseURL,localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
 
                 }
             }); 
 
         }else{
-            //console.log("this is the value od doFEtch --> " + doFetch)
             data = JSON.parse(localStorage.getItem("cryptoData"));
         };
         for(let i=0 ;i<perPage;i++){
             
             $('#here-tbody').append( '<tr>'
                                         +'<th scope="row">' + data[i].trust_score_rank + '</th>'
-                                        +'<th>' +'<img src="'+data[i].image+'" id="table-coin-logo" > ' + data[i].name + '</th>'
+                                        +'<th><a href="'+data[i].url+'" class="exchange-name-link">' +'<img src="'+data[i].image+'" id="table-coin-logo" > ' + data[i].name + '</a></th>'
                                         +'<td>' + data[i].trust_score + '</td>'
                                         +'<td>' + localStorage.getItem("currencySymbol") +formatNumber(data[i].trade_volume_24h_btc)+ '</td>'
                                         +'<td>' + data[i].year_established + '</td>'
@@ -179,7 +172,6 @@ const printCryptoCurrencyTable = async (doFetch,baseURL,currency,perPage,page)=>
             let data;
 
             if(doFetch){
-                //console.log("this is the value od doFEtch --> " + doFetch)
                 data = await fetchCryptoCurrencyData(baseURL,currency,perPage,page);
                 cleanTable();
                 $('#here-table').append(
@@ -204,11 +196,9 @@ const printCryptoCurrencyTable = async (doFetch,baseURL,currency,perPage,page)=>
                         $("#marketCap").removeClass("isAsc");
                         orderCryptoTable("market_cap",true); 
                         printCryptoCurrencyTable(false,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
-                       // console.log("hellooooo");
                     }else{
                         $("#marketCap").addClass("isAsc");
                         orderCryptoTable("market_cap",false);
-                        //console.log("hello bye");
                         printCryptoCurrencyTable(false,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
 
                     }
@@ -220,11 +210,9 @@ const printCryptoCurrencyTable = async (doFetch,baseURL,currency,perPage,page)=>
                         $("#price").removeClass("isAsc");
                         orderCryptoTable("current_price",true); 
                         printCryptoCurrencyTable(false,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
-                       // console.log("hellooooo");
                     }else{
                         $("#price").addClass("isAsc");
                         orderCryptoTable("current_price",false);
-                        //console.log("hello bye");
                         printCryptoCurrencyTable(false,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
 
                     }
@@ -236,11 +224,9 @@ const printCryptoCurrencyTable = async (doFetch,baseURL,currency,perPage,page)=>
                         $("#volume24h").removeClass("isAsc");
                         orderCryptoTable("total_volume",true); 
                         printCryptoCurrencyTable(false,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
-                       // console.log("hellooooo");
                     }else{
                         $("#volume24h").addClass("isAsc");
                         orderCryptoTable("total_volume",false);
-                       // console.log("hello bye");
                         printCryptoCurrencyTable(false,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
 
                     }
@@ -252,11 +238,9 @@ const printCryptoCurrencyTable = async (doFetch,baseURL,currency,perPage,page)=>
                         $("#change24h").removeClass("isAsc");
                         orderCryptoTable("price_change_percentage_24h",true); 
                         printCryptoCurrencyTable(false,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
-                       // console.log("hellooooo");
                     }else{
                         $("#change24h").addClass("isAsc");
                         orderCryptoTable("price_change_percentage_24h",false);
-                        //console.log("hello bye");
                         printCryptoCurrencyTable(false,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
 
                     }
@@ -268,18 +252,15 @@ const printCryptoCurrencyTable = async (doFetch,baseURL,currency,perPage,page)=>
                         $("#supply").removeClass("isAsc");
                         orderCryptoTable("total_supply",true); 
                         printCryptoCurrencyTable(false,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
-                       // console.log("hellooooo");
                     }else{
                         $("#supply").addClass("isAsc");
                         orderCryptoTable("total_supply",false);
-                       // console.log("hello bye");
                         printCryptoCurrencyTable(false,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
 
                     }
                 });
 
             }else{
-                //console.log("this is the value od doFEtch --> " + doFetch)
                 data = JSON.parse(localStorage.getItem("cryptoData"));
             };
 
@@ -489,7 +470,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         cleanTableBody();
         if($("#crypto-tab").hasClass("active")){
-            //console.log("crypto tab is active")
             printCryptoCurrencyTable(true,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
         }else{
             printExchangeTable(true,baseURL,localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
@@ -501,7 +481,6 @@ document.addEventListener("DOMContentLoaded", () => {
         $(".perPageText").html(localStorage.getItem("perPage"));
         cleanTableBody();
         if($("#crypto-tab").hasClass("active")){
-            //console.log("crypto tab is active")
             printCryptoCurrencyTable(true,baseURL,localStorage.getItem("currency"),localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
         }else{
             printExchangeTable(true,baseURL,localStorage.getItem("perPage"),localStorage.getItem("currentPage"));
