@@ -61,4 +61,11 @@
      margin-bottom:0px;
  }
 
+ .table-header-order{
+    text-decoration:underline;
+    cursor:pointer;
+ }
 
+ .table-header-order:hover{
+    text-decoration-color: lightseagreen;
+ }
